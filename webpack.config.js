@@ -11,7 +11,7 @@ module.exports = {
   })],
 
   resolve: {
-      extensions: [".ts", ".tsx", ".js", ".jsx", "scss"]
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".scss", '.png']
   },
 
   module: {
@@ -25,6 +25,13 @@ module.exports = {
               ]
           },
           {
+              test: /\.css$/,
+              use: [
+                  "style-loader",
+                  "css-loader"
+              ]
+          },
+          {
               test: /\.ts(x?)$/,
               exclude: /node_modules/,
               use: [
@@ -32,7 +39,15 @@ module.exports = {
                       loader: "ts-loader"
                   }
               ]
-          }
+          },
+          {
+            test: /\.(png|jpe?g|gif)$/i,
+            use: [
+              {
+                loader: 'file-loader',
+              },
+            ],
+          },
       ]
   }
 };

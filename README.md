@@ -1,6 +1,6 @@
-Template Project for React.js
+# Trello Clone
 
-Following tools has been included and set up
+Following technology are used in this project
 
 * TypeScript
 * Webpack

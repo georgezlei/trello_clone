@@ -1,10 +1,15 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Hello } from "./components/Hello";
+import {Home} from './pages/home/Home';
 import "./index.scss";
 
+import {TrelloContext} from './context';
+import * as data from '../static/data.json';
+
 ReactDOM.render(
-    <Hello compiler="TypeScript" framework="React" />,
+    <TrelloContext.Provider value={data}>
+        <Home />
+    </TrelloContext.Provider>,
     document.getElementById("root")
 );

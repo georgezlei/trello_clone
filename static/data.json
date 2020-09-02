@@ -1,0 +1,28 @@
+{
+  "personal": [
+    {
+      "id": 1,
+      "title": "Welcome Board",
+      "background": {
+        "type": "color",
+        "value": "#4bbf6b"
+      },
+      "starred": true
+    },
+    {
+      "id": 2,
+      "title": "Trello Clone",
+      "background": {
+        "type": "color",
+        "value": "#0079bf"
+      },
+      "starred": false
+    }
+  ],
+  "recent": [
+    2
+  ],
+  "starred": [
+    1
+  ]
+}

@@ -1,0 +1,86 @@
+@use '../vars';
+
+.nav-bar {
+  height: 40px;
+  width: 100%;
+  .page-header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 40px;
+    width: 100%;
+    background-color: vars.$bg-color-1;
+    display: block;
+    .buttons {
+      display: block;
+      list-style-type: none;
+      li {
+        float: left;
+        margin: 4px 0 4px 4px;
+        button {
+          background-color: vars.$bg-color-2;
+          color: vars.$color-2;
+          height: 32px;
+          width: 32px;
+          border-width: 0;
+          border-radius: 4px;
+          font-size: 16px;
+          outline: 0;
+          &.user {
+            border-radius: 50%;
+          }
+          i {
+            font-size: 16px;
+          }
+          &:hover {
+            background-color: vars.$bg-color-2-hi;
+            cursor: pointer;
+            outline: 0;
+          }
+          &.btn-boards span {
+            display: none;
+            padding-left: 8px;
+            font-weight: 700;
+          }
+          &.btn-search input {
+            display: none;
+            background-color: transparent;
+            color: vars.$color-2;
+            height: 32px;
+            border: 0;
+            outline: 0;
+          }
+          @media only screen and (min-width: 600px) {
+            &.btn-boards {
+              width: 91px;
+              span {
+                display: inline-block;
+              }
+            }
+            &.btn-search {
+              width: 180px;
+              input {
+                display: inline-block;
+              }
+            }
+          }
+        }
+      }
+    }
+    .buttons-left {
+      float: left;
+    }
+    .buttons-right {
+      float: right;
+      margin-right: 4px;
+    }
+    .header-logo {
+      display: grid;
+      justify-items: center;
+      img {
+        height: 40px;
+        opacity: .5;
+      }
+    }
+  }
+}
