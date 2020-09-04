@@ -1,0 +1,51 @@
+@use '../../vars';
+
+.side-bar {
+  display: block;
+  width: 272px;
+  margin-top: 40px;
+
+  @media only screen and (max-width: 600px) {
+    display: none;
+  }
+  
+  .menu {
+    padding: 0 16px;
+
+    .menu-item {
+      width: 240px;
+      height: 32px;
+      margin-bottom: 4px;
+
+      i {
+        padding: 9px;
+      }
+      span {
+        font-size: 14px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .teams {
+    padding: 10px 16px;
+
+    .title {
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 9px;
+    }
+
+    .add-team {
+
+      i {
+        padding: 9px;
+      }
+    }
+  }
+}
+
+.selected {
+  background-color: rgba(0,0,0,.1);
+}

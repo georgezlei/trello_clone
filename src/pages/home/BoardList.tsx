@@ -88,7 +88,7 @@ export const BoardLists = () => {
   }
 
   return (
-    <>
+    <div className='board-list-pane'>
       <BoardList
         type={boardCategories.Starred}
         title={titles[boardCategories.Starred]}
@@ -110,6 +110,6 @@ export const BoardLists = () => {
         items={personalBoards}
         toggleStar={toggleStar}
       />
-    </>
+    </div>
   )
 }
