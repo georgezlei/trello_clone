@@ -11,7 +11,7 @@ module.exports = {
   })],
 
   resolve: {
-      extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".scss", '.png']
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".scss", '.png', '.jpeg']
   },
 
   module: {
