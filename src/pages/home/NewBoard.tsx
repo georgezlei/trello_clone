@@ -93,6 +93,7 @@ const NewBoard = ({createBoardCallback, onClick}:
       createBoard();
     }
   }
+
   return (
     <div className='new-board-popup' onClick={dismissPopup}>
       <div className='new-board-form' onClick={(e)=>{e.stopPropagation();}}>
@@ -117,7 +118,11 @@ const NewBoard = ({createBoardCallback, onClick}:
         <div className='background-selector'>
           <ul>
             {backgroundList.map((bg) => (
-              <li key={bg.value}><div style={bgStyle(bg)}></div></li>
+              <li key={bg.value}>
+                <div style={bgStyle(bg)} onClick={()=>{setBackground(bg)}}>
+                  {bg.value === background.value ? <i className='fas fa-check' /> : ''}
+                </div>
+              </li>
             ))}
             <li><div className='more-bg-button'><i className='fas fa-ellipsis-h' /></div></li>
           </ul>
