@@ -8,12 +8,12 @@ import * as rawData from '../../../static/data.json';
 
 
 const BoardList = ({type, title, icon, items, toggleStarCallback, createBoardCallback}: 
-                  {type: string,
-                  title: string,
-                  icon: string,
-                  items: BoardMetaData[],
-                  toggleStarCallback(id: number): void,
-                  createBoardCallback?(board: BoardMetaData): void
+                    {type: string,
+                    title: string,
+                    icon: string,
+                    items: BoardMetaData[],
+                    toggleStarCallback(id: number): void,
+                    createBoardCallback?(board: BoardMetaData): void
                   }) => {
 
   const [popupVisible, setPopupVisible] = React.useState(false);
@@ -92,7 +92,7 @@ export const BoardLists = () => {
 
   const toggleStar = (id: number) => {
     // set board.starred to true
-    const board = personal.find((b: BoardMetaData) => b.id === id);
+    const board = personalBoards.find((b: BoardMetaData) => b.id === id);
     board.starred = !board.starred;
 
     if (starred.includes(id)) {
