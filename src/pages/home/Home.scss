@@ -1,5 +1,12 @@
-.body {
-  display: flex;
-  max-width: 1097px;
-  margin: 0 auto;
+@use '../../vars';
+
+.home {
+  background-color: vars.$bg-color-1;
+  
+  .body {
+    display: flex;
+    max-width: 1097px;
+    margin: 0 auto;
+    background-color: white;
+  }
 }

@@ -1,10 +1,12 @@
 import * as React from 'react';
+import {Link} from 'react-router-dom';
 
 import {BoardMetaData, boardCategories} from '../../customTypings/types';
 import NewBoard from './NewBoard';
 
 import './BoardList.scss';
 import * as rawData from '../../../static/data.json';
+import { TrelloContext } from '../../context';
 
 
 const BoardList = ({type, title, icon, items, toggleStarCallback, createBoardCallback}: 
@@ -35,15 +37,17 @@ const BoardList = ({type, title, icon, items, toggleStarCallback, createBoardCal
       <ul className="board-list-content clearfix">
         {items.map((board) => (
           <li className="board" style={bgStyle(board)} key={board.id}>
-            <div className="background-mask">
-              <div className="board-title">{board.title}</div>
-              <div className="board-star">
-                <i
-                  className={board.starred ? 'far fa-star starred' : 'far fa-star'}
-                  onClick={() => toggleStarCallback(board.id)}
-                ></i>
+            <Link to={{pathname: `/board`, state: board}}>
+              <div className="background-mask">
+                <div className="board-title">{board.title}</div>
+                <div className="board-star">
+                  <i
+                    className={board.starred ? 'far fa-star starred' : 'far fa-star'}
+                    onClick={() => toggleStarCallback(board.id)}
+                  ></i>
+                </div>
               </div>
-            </div>
+            </Link>
           </li>
         ))}
         {type === boardCategories.Personal ? 
@@ -69,7 +73,7 @@ const BoardList = ({type, title, icon, items, toggleStarCallback, createBoardCal
 
 export const BoardLists = () => {
   const {personal, recent, starred}: 
-    {personal: BoardMetaData[], recent: number[], starred: number[]} = rawData;
+    {personal: BoardMetaData[], recent: number[], starred: number[]} = React.useContext(TrelloContext);
 
   const [personalBoards, setPersonalBoards] = React.useState(personal);
   const [recentBoards, setRecentBoards] = React.useState(
@@ -111,7 +115,8 @@ export const BoardLists = () => {
   }
 
   const createBoard = (board: BoardMetaData) => {
-    setPersonalBoards([...personalBoards, board]);
+    personalBoards.push(board);
+    setPersonalBoards(personalBoards);
   }
 
   return (

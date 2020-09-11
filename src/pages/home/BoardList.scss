@@ -54,6 +54,11 @@
 
           }
         }
+
+        a {
+          text-decoration: none;
+        }
+
         .background-mask {
           background-color: rgba(0, 0, 0, 0);
           width: 100%;
@@ -73,12 +78,14 @@
             }
           }
         }
+
         .board-title {
           font-size: 16px;
           font-weight: 700;
           color: vars.$color-2;
           padding: 10px;
         }
+        
         .board-star {
           padding: 10px;
           display: flex;
