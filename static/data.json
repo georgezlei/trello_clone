@@ -7,7 +7,28 @@
         "type": "color",
         "value": "#4bbf6b"
       },
-      "starred": true
+      "starred": true,
+      "lists": [
+        {
+          "title": "list 1",
+          "cards": [
+            {
+              "title": "Card 1",
+              "description": "This is the first card",
+              "comments": [
+                "comment 1"
+              ]
+            },
+            {
+              "title": "Card 2",
+              "description": "This is the second card",
+              "comments": [
+                "comment 2"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 2,
@@ -16,7 +37,8 @@
         "type": "color",
         "value": "#0079bf"
       },
-      "starred": false
+      "starred": false,
+      "lists": []
     }
   ],
   "recent": [

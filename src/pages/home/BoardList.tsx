@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Link} from 'react-router-dom';
 
-import {BoardMetaData, boardCategories} from '../../customTypings/types';
+import {BoardType, boardCategories} from '../../customTypings/types';
 import NewBoard from './NewBoard';
 
 import './BoardList.scss';
@@ -13,9 +13,9 @@ const BoardList = ({type, title, icon, items, toggleStarCallback, createBoardCal
                     {type: string,
                     title: string,
                     icon: string,
-                    items: BoardMetaData[],
+                    items: BoardType[],
                     toggleStarCallback(id: number): void,
-                    createBoardCallback?(board: BoardMetaData): void
+                    createBoardCallback?(board: BoardType): void
                   }) => {
 
   const [popupVisible, setPopupVisible] = React.useState(false);
@@ -24,7 +24,7 @@ const BoardList = ({type, title, icon, items, toggleStarCallback, createBoardCal
     return (<div></div>);
   }
 
-  const bgStyle = (b: BoardMetaData) => (b.background.type === 'color' ?
+  const bgStyle = (b: BoardType) => (b.background.type === 'color' ?
               {backgroundColor: b.background.value} :
               {backgroundImage: `url(${b.background.value})`});
 
@@ -73,14 +73,14 @@ const BoardList = ({type, title, icon, items, toggleStarCallback, createBoardCal
 
 export const BoardLists = () => {
   const {personal, recent, starred}: 
-    {personal: BoardMetaData[], recent: number[], starred: number[]} = React.useContext(TrelloContext);
+    {personal: BoardType[], recent: number[], starred: number[]} = React.useContext(TrelloContext);
 
   const [personalBoards, setPersonalBoards] = React.useState(personal);
   const [recentBoards, setRecentBoards] = React.useState(
-    personal.filter((b: BoardMetaData) => recent.includes(b.id))
+    personal.filter((b: BoardType) => recent.includes(b.id))
   );
   const [starredBoards, setStarredBoards] = React.useState(
-    personal.filter((b: BoardMetaData) => starred.includes(b.id))
+    personal.filter((b: BoardType) => starred.includes(b.id))
   );
 
   const icons = {
@@ -96,7 +96,7 @@ export const BoardLists = () => {
 
   const toggleStar = (id: number) => {
     // set board.starred to true
-    const board = personalBoards.find((b: BoardMetaData) => b.id === id);
+    const board = personalBoards.find((b: BoardType) => b.id === id);
     board.starred = !board.starred;
 
     if (starred.includes(id)) {
@@ -109,12 +109,12 @@ export const BoardLists = () => {
 
     setStarredBoards(
       personalBoards.filter(
-        (b: BoardMetaData) => starred.includes(b.id)
+        (b: BoardType) => starred.includes(b.id)
       )
     );
   }
 
-  const createBoard = (board: BoardMetaData) => {
+  const createBoard = (board: BoardType) => {
     personalBoards.push(board);
     setPersonalBoards(personalBoards);
   }

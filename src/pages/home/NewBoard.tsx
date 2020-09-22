@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {BoardMetaData} from '../../customTypings/types';
+import {BoardType} from '../../customTypings/types';
 
 import './NewBoard.scss';
 import bg1 from '../../../static/bg-1.jpeg';
@@ -62,7 +62,7 @@ interface Background {
 }
 
 const NewBoard = ({createBoardCallback, onClick}: 
-  {createBoardCallback(board: BoardMetaData): void, onClick(): void}) => {
+  {createBoardCallback(board: BoardType): void, onClick(): void}) => {
 
   const [background, setBackground] = React.useState(backgroundList[0]);
   const [title, setTitle] = React.useState('');
@@ -75,7 +75,7 @@ const NewBoard = ({createBoardCallback, onClick}:
   const createBoard = () => {
     if (title === '') return;
 
-    const board: BoardMetaData = {
+    const board: BoardType = {
       id: Date.now(),
       title,
       background: {
@@ -83,6 +83,7 @@ const NewBoard = ({createBoardCallback, onClick}:
         value: background.value
       },
       starred: false,
+      lists: []
     };
     createBoardCallback(board);
     dismissPopup();

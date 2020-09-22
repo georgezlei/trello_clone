@@ -10,9 +10,11 @@ export const Home = () => {
   return (
     <div className='home'>
       <NavBar />
-      <div className='body'>
-        <SideBar />
-        <BoardLists />
+      <div className='body-container'>
+        <div className='body'>
+          <SideBar />
+          <BoardLists />
+        </div>
       </div>
     </div>
   )
