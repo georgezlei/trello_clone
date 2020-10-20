@@ -7,40 +7,42 @@ import NavBar from '../../components/NavBar';
 import './Board.scss';
 import { BoardLists } from '../home/BoardList';
 
-enum ListStatus {
-  void,
-  creating,
-  created
-}
-
 interface BoardCallbacks {
   addList?: (title: string) => void;
 }
 
 // Component: Card
 
-const Card = ({card, index, onDragOver, deleteCard}:
-    {card?: CardType, index: number, onDragOver?(): void, deleteCard?(): void}) => {
+const Card = ({card, index, onDragOver, onDragStart}:
+    {
+      card?: CardType,
+      index: number,
+      onDragOver?(): void,
+      onDragStart?(): void,
+    }) => {
+
   const [dropTargetShown, showDropTarget] = React.useState(false);
 
-  const onDragStart = (e: React.DragEvent) => {
-    deleteCard();
-    e.dataTransfer.setData('card', JSON.stringify(card));
+  const startDragging = (e: React.DragEvent) => {
+    onDragStart();
+    // showDropTarget(true);
   }
 
-  const onDragEnd = () => {
-    // if (not)
-  }
-  if (card) {
+  if (card && !dropTargetShown) {
     return (
       <div className='card-container'>
         <div className='space-filler' />
         <div className='card'
           draggable='true'
-          onDragOver={onDragOver}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          // onDrop={()=>{console.log('drop')}}
+          onDragOver={ (e)=>{
+            e.stopPropagation();
+            e.preventDefault();
+            onDragOver();
+          } }
+          onDragStart={ startDragging }
+          onDragEnd={ ()=>console.log('end') }
+          onKeyDown={ (e)=>console.log(e.key) }
+          tabIndex={1}
         >
           <span>{card.title}</span>
           <i className='far fa-edit' />
@@ -173,9 +175,16 @@ const NewListButton = ({addList}: {addList(title: string): void}) => {
 
 // Component: List
 
-const List = ({list, callbacks}: {list?: ListType, callbacks: BoardCallbacks}) => {
-  const [cards, setCards] = React.useState(list ? list.cards : []);
-  const [dropPosition, setDropPosition] = React.useState(-1);
+const List = ({list, dropPosition, onDragStart, onDragCardStart, onDragOver}: {
+      list: ListType,
+      dropPosition: number,
+      onDragStart(): void,
+      onDragCardStart(card: number): void,
+      onDragOver(card: number): void
+    }) => {
+
+  // cards state is not used in component, this is only a trick to force re-rendering
+  const [cards, setCards] = React.useState(list.cards.length);
 
   const addNewCard = (title: string) => {
     const newCard: CardType = {
@@ -183,44 +192,27 @@ const List = ({list, callbacks}: {list?: ListType, callbacks: BoardCallbacks}) =
       description: '',
       comments: []
     };
-    setCards([...cards, newCard]);
+    setCards(cards + 1);
     list.cards.push(newCard);
   }
 
-  const hideDropTarget = (e: React.DragEvent<HTMLDivElement>) => {
-    // Only process the events fired by .list-container
-    const div: HTMLDivElement = e.target as HTMLDivElement;
-    if (div.classList.contains('list-container')) {
-      setDropPosition(-1);
-    }
-  } 
-
-  const deleteCard = (index: number) => {
-    cards.splice(index, 1);
-  }
-
-  const onDrop = (e: React.DragEvent) => {
-    if (dropPosition >= 0) {
-      const data = e.dataTransfer.getData('card');
-      const card = JSON.parse(data);
-      cards.splice(dropPosition, 0, card);
-      setDropPosition(-1);
-    }
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    onDragOver(list.cards.length);
   }
 
   return (
     <div
       className='list-container'
       draggable='true'
-      onDragLeave={ hideDropTarget }
-      onDrop={ onDrop }
-      onDragOver={ e => e.preventDefault() }
+      onDragOver={ handleDragOver }
     >
       <ListTitle list={list} />
 
       {
-        cards.map((card, index) => (
+        list.cards.map((card, index) => (
           <React.Fragment key={ index }>
+            {console.log(`In List: Card "${card.title}"`)}
             {
               index === dropPosition ? 
                 <Card index={ index } key={ index + 't' } />
@@ -230,21 +222,53 @@ const List = ({list, callbacks}: {list?: ListType, callbacks: BoardCallbacks}) =
             <Card
               card={ card }
               index={ index }
-              onDragOver={ () => {setDropPosition(dropPosition === index ? index + 1 : index)} }
-              deleteCard={ () => deleteCard(index) }
+              onDragOver={ () => { onDragOver(index) } }
+              onDragStart={ () => { onDragCardStart(index) } }
               key={ index }
             />
           </React.Fragment>
         ))
       }
       {
-        cards.length === dropPosition ? 
-          <Card index={cards.length} key={cards.length + 't'} />
+        list.cards.length === dropPosition ? 
+          <Card index={list.cards.length} key={list.cards.length + 't'} />
         :
           ''
       }
 
       <ListAction addCard={ addNewCard } />
+    </div>
+  )
+}
+
+
+// Component: Board Tool Bar
+
+const BoardToolBar = () => {
+  return (
+    <div className='toolbar'>
+      <div className='group-left'>
+        <h1>Title</h1>
+        <button><i className='far fa-star' /></button>
+        <div className='button-divider'></div>
+        <button>Personal</button>
+        <div className='button-divider'></div>
+        <button>Private</button>
+        <div className='button-divider'></div>
+        <button className='user'>GL</button>
+        <button>Invite</button>
+      </div>
+
+      <div className='group-right'>
+        <button>
+          <i className='fas fa-concierge-bell' />
+          <span>Butler</span>
+        </button>
+        <button>
+          <i className='fas fa-ellipsis-h' />
+          <span>Show Menu</span>
+        </button>
+      </div>
     </div>
   )
 }
@@ -262,6 +286,56 @@ const Board = () => {
   const [title, setTitle] = React.useState(board.title);
   const [star, setStar] = React.useState(board.starred);
   const [lists, setLists] = React.useState(board.lists);
+  const [dropLocation, setDropLocation] = React.useState([-1, -1]);
+  const cardInDragging = React.useRef([-1, -1]);
+  
+  let listInDragging: ListType = null;
+
+  const handleDraggingListStart = (list: ListType) => {
+    listInDragging = list;
+  }
+  
+  const handleDraggingCardStart = (list: number, card: number) => {
+    cardInDragging.current = [list, card];
+  }
+
+  const reportDragOver = (list: number, card: number) => {
+    // move the card if it is not in the new location
+    const [fromList, fromCard] = cardInDragging.current;
+
+    if (fromList !== list || 
+      (fromCard !== card && 
+        !(fromCard < card && fromCard === lists[list].cards.length - 1) // ignore the repeat requests to move the card to end of list
+      )
+    ) {
+      const theCard = lists[fromList].cards[fromCard];
+      const newLists = lists.map((l, index) => {
+        if (index !== fromList && index !== list) {
+          return l;
+        }
+
+        let cards: CardType[] = l.cards;
+        if (index === fromList) {
+          cards = [...cards.slice(0, fromCard), ...cards.slice(fromCard + 1)]
+        }
+        if (index === list) {
+          if (card > cards.length) {
+            card = cards.length
+          }
+          cards = [...cards.slice(0, card), theCard, ...cards.slice(card)]
+        }
+
+        return { title: l.title, cards };
+      });
+      cardInDragging.current = [list, card];
+      setLists(newLists);
+    }
+  }
+
+  const handleDrop = () => {
+    console.log('drop')
+    cardInDragging.current = [-1, -1];
+  }
   
   const moveCard = (list: number, card: number, toList: number, toPosition: number) => {}
   const moveList = (list: number, toPosition: number) => {}
@@ -288,44 +362,32 @@ const Board = () => {
       <NavBar />
       <div className='body'>
 
-        {/* toolbar */}
-        <div className='toolbar'>
-          <div className='group-left'>
-            <h1>Title</h1>
-            <button><i className='far fa-star' /></button>
-            <div className='button-divider'></div>
-            <button>Personal</button>
-            <div className='button-divider'></div>
-            <button>Private</button>
-            <div className='button-divider'></div>
-            <button className='user'>GL</button>
-            <button>Invite</button>
-          </div>
-
-          <div className='group-right'>
-            <button>
-              <i className='fas fa-concierge-bell' />
-              <span>Butler</span>
-            </button>
-            <button>
-              <i className='fas fa-ellipsis-h' />
-              <span>Show Menu</span>
-            </button>
-          </div>
-        </div>
+        <BoardToolBar />
         <div className='toolbar-placeholder'></div>
 
         {/* Canvas */}
-        <div className='board-canvas'>
+        <div
+          className='board-canvas'
+          onDrop={ handleDrop }
+          tabIndex={0}
+          onKeyDown={ (e) => {
+            console.log(e.key)
+            if (e.key === 'Escape') {
+              console.log('esc')
+            }
+          }}
+        >
           {
-            lists.map((l, index) => (
+            lists.map((l, index) => { console.log(`display list "${l.title}" cards [${l.cards.map(c=>c.title)}]`); return (
               <List
-                list={l}
-                callbacks={{
-                }}
+                list={ l }
+                dropPosition={dropLocation[0] === index ? dropLocation[1] : -1}
+                onDragStart={ () => handleDraggingListStart(l) }
+                onDragCardStart={ (card) => handleDraggingCardStart(index, card) }
+                onDragOver={ (card) => reportDragOver(index, card) }
                 key={index}
               />
-            ))
+            )})
           }
           <NewListButton addList={ addList }/>
         </div>
