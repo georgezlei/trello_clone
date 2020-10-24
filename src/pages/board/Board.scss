@@ -26,13 +26,37 @@
         display: flex;
         flex-wrap: wrap;
 
-        h1 {
-          font-size: 18px;
-          font-weight: 700;
-          line-height: 32px;
-          padding: 0 12px;
-          color: vars.$color-2;
-          margin-top: 8px;
+        .board-title {
+          position: relative;
+
+          h1 {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 32px;
+            padding: 0 12px;
+            color: vars.$color-2;
+            margin-top: 8px;
+            max-width: 210px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          input {
+            font-size: 18px;
+            line-height: 32px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: calc(100% - 24px);
+            padding: 0 12px;
+            margin-top: 8px;
+            outline: 0;
+            border: 0;
+          }
+        }
+        .starred {
+          color: gold;
         }
       }
 
@@ -82,6 +106,7 @@
       background: linear-gradient(180deg,rgba(0,0,0,.24) 0,rgba(0,0,0,.24) 48px,transparent 80px,transparent);
       height: 100%;
       overflow: auto;
+      outline: 0;
 
       >button {
         height: 40px;

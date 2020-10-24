@@ -212,7 +212,6 @@ const List = ({list, dropPosition, onDragStart, onDragCardStart, onDragOver}: {
       {
         list.cards.map((card, index) => (
           <React.Fragment key={ index }>
-            {console.log(`In List: Card "${card.title}"`)}
             {
               index === dropPosition ? 
                 <Card index={ index } key={ index + 't' } />
@@ -241,15 +240,52 @@ const List = ({list, dropPosition, onDragStart, onDragCardStart, onDragOver}: {
   )
 }
 
+const BoardTitle = ({board}: {board: BoardType}) => {
+
+  const [title, setTitle] = React.useState(board.title);
+  const [inEdit, edit] = React.useState(false);
+
+  const updateTitle = (newTitle: string) => {
+    board.title = newTitle;
+    setTitle(newTitle);
+  }
+
+  return (
+    <div className='board-title'>
+        <h1 onClick={ ()=>edit(true) }>{ title }</h1>
+        { inEdit ?
+          <input
+            type='text'
+            placeholder='Enter board title...'
+            value={ title }
+            onChange={ e => updateTitle(e.target.value) }
+            onKeyPress={ e => (e.key == 'Enter') && edit(false) }
+            onBlur={ e => edit(false) }
+            autoFocus
+          /> : ''
+        }
+    </div>
+  )
+}
 
 // Component: Board Tool Bar
 
-const BoardToolBar = () => {
+const BoardToolBar = ({board}: {board: BoardType}) => {
+
+  const [starred, setStarred] = React.useState(board.starred);
+
+  const handleStarClick = () => {
+    board.starred = !starred;
+    setStarred(!starred);
+  }
+
   return (
     <div className='toolbar'>
       <div className='group-left'>
-        <h1>Title</h1>
-        <button><i className='far fa-star' /></button>
+        <BoardTitle board={ board } />
+        <button onClick={ handleStarClick }>{
+          starred ? <i className='far fa-star starred' /> : <i className='far fa-star' />
+        }</button>
         <div className='button-divider'></div>
         <button>Personal</button>
         <div className='button-divider'></div>
@@ -283,8 +319,6 @@ const Board = () => {
               {backgroundColor: b.background.value} :
               {backgroundImage: `url(${b.background.value})`});
 
-  const [title, setTitle] = React.useState(board.title);
-  const [star, setStar] = React.useState(board.starred);
   const [lists, setLists] = React.useState(board.lists);
   const [dropLocation, setDropLocation] = React.useState([-1, -1]);
   const cardInDragging = React.useRef([-1, -1]);
@@ -362,7 +396,7 @@ const Board = () => {
       <NavBar />
       <div className='body'>
 
-        <BoardToolBar />
+        <BoardToolBar board={ board } />
         <div className='toolbar-placeholder'></div>
 
         {/* Canvas */}
@@ -378,7 +412,7 @@ const Board = () => {
           }}
         >
           {
-            lists.map((l, index) => { console.log(`display list "${l.title}" cards [${l.cards.map(c=>c.title)}]`); return (
+            lists.map((l, index) => (
               <List
                 list={ l }
                 dropPosition={dropLocation[0] === index ? dropLocation[1] : -1}
@@ -387,7 +421,7 @@ const Board = () => {
                 onDragOver={ (card) => reportDragOver(index, card) }
                 key={index}
               />
-            )})
+            ))
           }
           <NewListButton addList={ addList }/>
         </div>
