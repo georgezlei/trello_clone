@@ -40,10 +40,6 @@ const Card = ({ card, index, onDragOver, onDragStart }:
           onDragStart={ startDragging }
           tabIndex={ 1 }
         >
-          <div>
-            <span>{ title }</span>
-            <i className='far fa-edit' onClick={ () => setTitleInEdit(true) } />
-          </div>
           { titleInEdit ?
             <input
               type='text'
@@ -53,7 +49,12 @@ const Card = ({ card, index, onDragOver, onDragStart }:
               onKeyPress={ e => (e.key === 'Enter') && setTitleInEdit(false) }
               onBlur={ e => setTitleInEdit(false) }
               autoFocus
-            /> : ''
+            />
+            :
+            <div>
+              <span>{ title }</span>
+              <i className='far fa-edit' onClick={ () => setTitleInEdit(true) } />
+            </div>
           }
         </div>
       </div>

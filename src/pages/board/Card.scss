@@ -14,7 +14,6 @@
     padding: 8px;
     cursor: pointer;
     align-items: center;
-    position: relative;
     outline: 0;
 
     > div {
@@ -22,9 +21,6 @@
     }
 
     > input {
-      position: absolute;
-      top: 0;
-      left: 0;
       outline: 0;
       border: 0;
       border-radius: 3px;
