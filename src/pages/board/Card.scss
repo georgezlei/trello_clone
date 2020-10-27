@@ -1,0 +1,65 @@
+@use '../../vars';
+
+.card-container {
+  .space-filler {
+    height: 8px;
+  }
+
+  .card {
+    background-color: #fff;
+    border-radius: 3px;
+    border-bottom-color: vars.$color-border-1;
+    box-shadow: 0 1px vars.$color-border-2;
+    color: vars.$color-1;
+    padding: 8px;
+    cursor: pointer;
+    align-items: center;
+    position: relative;
+    outline: 0;
+
+    > div {
+      display: flex;
+    }
+
+    > input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      outline: 0;
+      border: 0;
+      border-radius: 3px;
+    }
+
+    &:hover {
+      background-color: vars.$bg-color-button-1;
+      border-bottom-color: vars.$color-border-2;
+
+      i {
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        background-color: vars.$bg-color-2;
+
+        &:hover {
+          background-color: vars.$color-filter-3;
+        }
+      }
+    }
+
+    span {
+      flex: 1;
+    }
+
+    i {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      display: none;
+    }
+  }
+
+  .place-holder {
+    height: 20px;
+    background-color: vars.$bg-color-2;
+  }
+}

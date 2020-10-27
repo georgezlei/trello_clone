@@ -3,59 +3,11 @@ import { useLocation } from 'react-router-dom';
 
 import { BoardType, ListType, CardType } from '../../customTypings/types';
 import NavBar from '../../components/NavBar';
+import Card from './Card';
 
 import './Board.scss';
 import { BoardLists } from '../home/BoardList';
 
-interface BoardCallbacks {
-  addList?: (title: string) => void;
-}
-
-// Component: Card
-
-const Card = ({card, index, onDragOver, onDragStart}:
-    {
-      card?: CardType,
-      index: number,
-      onDragOver?(): void,
-      onDragStart?(): void,
-    }) => {
-
-  const [dropTargetShown, showDropTarget] = React.useState(false);
-
-  const startDragging = (e: React.DragEvent) => {
-    onDragStart();
-    // showDropTarget(true);
-  }
-
-  if (card && !dropTargetShown) {
-    return (
-      <div className='card-container'>
-        <div className='space-filler' />
-        <div className='card'
-          draggable='true'
-          onDragOver={ (e)=>{
-            e.stopPropagation();
-            e.preventDefault();
-            onDragOver();
-          } }
-          onDragStart={ startDragging }
-          onDragEnd={ ()=>console.log('end') }
-          onKeyDown={ (e)=>console.log(e.key) }
-          tabIndex={1}
-        >
-          <span>{card.title}</span>
-          <i className='far fa-edit' />
-        </div>
-      </div>);
-  } else {
-    return (
-      <div className='card-container'>
-        <div className='space-filler' />
-        <div className='card place-holder' />
-      </div>);
-  }
-}
 
 // Component: List Title
 
@@ -404,12 +356,6 @@ const Board = () => {
           className='board-canvas'
           onDrop={ handleDrop }
           tabIndex={0}
-          onKeyDown={ (e) => {
-            console.log(e.key)
-            if (e.key === 'Escape') {
-              console.log('esc')
-            }
-          }}
         >
           {
             lists.map((l, index) => (

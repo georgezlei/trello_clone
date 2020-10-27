@@ -200,56 +200,6 @@
 
         }
         
-        .card-container {
-          .space-filler {
-            height: 8px;
-          }
-          .card {
-            background-color: #fff;
-            border-radius: 3px;
-            border-bottom-color: vars.$color-border-1;
-            box-shadow: 0 1px vars.$color-border-2;
-            // margin-bottom: 8px;
-            color: vars.$color-1;
-            padding: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-
-            &:hover {
-              background-color: vars.$bg-color-button-1;
-              border-bottom-color: vars.$color-border-2;
-
-              i {
-                display: grid;
-                justify-items: center;
-                align-items: center;
-                background-color: vars.$bg-color-2;
-
-                &:hover {
-                  background-color: vars.$color-filter-3;
-                }
-              }
-            }
-
-            span {
-              flex: 1;
-            }
-
-            i {
-              width: 20px;
-              height: 20px;
-              border-radius: 3px;
-              display: none;
-            }
-          }
-
-          .place-holder {
-            height: 20px;
-            background-color: vars.$bg-color-2;
-          }
-        }
-
         .list-action {
           color: vars.$color-3;
           padding: 8px;
