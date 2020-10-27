@@ -43,7 +43,10 @@ const BoardList = ({type, title, icon, items, toggleStarCallback, createBoardCal
                 <div className="board-star">
                   <i
                     className={board.starred ? 'far fa-star starred' : 'far fa-star'}
-                    onClick={() => toggleStarCallback(board.id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleStarCallback(board.id)
+                    }}
                   ></i>
                 </div>
               </div>
