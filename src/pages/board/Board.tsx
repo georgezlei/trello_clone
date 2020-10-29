@@ -140,6 +140,7 @@ const List = ({list, dropPosition, onDragStart, onDragCardStart, onDragOver}: {
 
   const addNewCard = (title: string) => {
     const newCard: CardType = {
+      id: Date.now(),
       title: title,
       description: '',
       comments: []
@@ -175,7 +176,7 @@ const List = ({list, dropPosition, onDragStart, onDragCardStart, onDragOver}: {
               index={ index }
               onDragOver={ () => { onDragOver(index) } }
               onDragStart={ () => { onDragCardStart(index) } }
-              key={ index }
+              key={ card.id }
             />
           </React.Fragment>
         ))
@@ -296,17 +297,23 @@ const Board = () => {
     ) {
       const theCard = lists[fromList].cards[fromCard];
       const newLists = lists.map((l, index) => {
+
+        // if current list is neither from-list nor to-list, don't process it.
         if (index !== fromList && index !== list) {
           return l;
         }
 
         let cards: CardType[] = l.cards;
+
+        // remove the dragging card from from-list
         if (index === fromList) {
-          cards = [...cards.slice(0, fromCard), ...cards.slice(fromCard + 1)]
+          cards = [...cards.slice(0, fromCard), ...cards.slice(fromCard + 1)];
         }
+
+        // add the dragging card into to-list
         if (index === list) {
           if (card > cards.length) {
-            card = cards.length
+            card = cards.length;
           }
           cards = [...cards.slice(0, card), theCard, ...cards.slice(card)]
         }
@@ -319,7 +326,6 @@ const Board = () => {
   }
 
   const handleDrop = () => {
-    console.log('drop')
     cardInDragging.current = [-1, -1];
   }
   
